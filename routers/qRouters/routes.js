@@ -1,10 +1,10 @@
 const express = require('express')
 const b = require('bcrypt')
-const { User } = require('./models/user.model')
-const { Quiz } = require('./models/quiz.model')
-const router = express.Router()
+const { User } = require('../../models/qModels/user.model')
+const {Quiz} = require('../../models/qModels/quiz.model')
+const quiz_router = express.Router()
 
-router.get('/user', async(req, res)=>{
+quiz_router.get('/user', async(req, res)=>{
     try {
         let users = await User.find()
         return res.status(200).send({msg : "all users", isOk : true, users : users})
@@ -14,7 +14,7 @@ router.get('/user', async(req, res)=>{
     }
 })
 
-router.post('/user/login', async(req, res)=>{
+quiz_router.post('/user/login', async(req, res)=>{
     let {email , password} = req.body
     try {
         let user = await User.findOne({email})
@@ -33,7 +33,7 @@ router.post('/user/login', async(req, res)=>{
     }
 })
 
-router.post('/user/register', async(req, res)=>{
+quiz_router.post('/user/register', async(req, res)=>{
     let {email , password} = req.body
     try {
         let user = await User.findOne({email})
@@ -60,7 +60,7 @@ router.post('/user/register', async(req, res)=>{
 })
 
 
-router.get('/getquiz', async(req, res)=>{
+quiz_router.get('/getquiz', async(req, res)=>{
     try {
         let quizes = await Quiz.find()
         res.status(200).send({msg :"all quizes", isOK : true, quizes : quizes})
@@ -70,7 +70,7 @@ router.get('/getquiz', async(req, res)=>{
     }
 })
 
-router.get('/getquiz/:id', async(req, res)=>{
+quiz_router.get('/getquiz/:id', async(req, res)=>{
     try {
         let id = req.params.id
         let quizes = await Quiz.findById(id)
@@ -81,7 +81,7 @@ router.get('/getquiz/:id', async(req, res)=>{
     }
 })
 
-router.post('/createquiz', async(req, res)=>{
+quiz_router.post('/createquiz', async(req, res)=>{
     try {
         let {creator, title, description, questions, leaderboard} = req.body
 
@@ -96,7 +96,7 @@ router.post('/createquiz', async(req, res)=>{
 })
 
 
-router.delete('/delete/:id',async(req,res)=>{
+quiz_router.delete('/delete/:id',async(req,res)=>{
     let id = req.params?.id
     try {
         let quiz = await Quiz.findByIdAndDelete(id)
@@ -107,7 +107,7 @@ router.delete('/delete/:id',async(req,res)=>{
     }
 })
 
-router.patch('/setScore/:quizId', async (req,res)=>{
+quiz_router.patch('/setScore/:quizId', async (req,res)=>{
     let quizID =req.params.quizId
     let {email , score} = req.body
     try {
@@ -132,7 +132,7 @@ router.patch('/setScore/:quizId', async (req,res)=>{
     }
 })
 
-router.patch('/updateQuiz', async(req,res)=>{
+quiz_router.patch('/updateQuiz', async(req,res)=>{
     try {
         let id = req.body._id
         let updatedQuiz = await Quiz.findByIdAndUpdate(id, req.body,{returnOriginal : true})
@@ -143,7 +143,7 @@ router.patch('/updateQuiz', async(req,res)=>{
     }
 })
 
-router.get('/getleaderboard/:quizId', async(req,res)=>{
+quiz_router.get('/getleaderboard/:quizId', async(req,res)=>{
     try {
         let id = req.params.quizId
         let quiz = await Quiz.findById(id)
@@ -153,4 +153,4 @@ router.get('/getleaderboard/:quizId', async(req,res)=>{
         return res.status(400).send({msg : "Something went wrong", isOk : false, error : error})
     }
 })
-module.exports = {router}
+module.exports = {quiz_router}

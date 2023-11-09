@@ -6,7 +6,7 @@ const userShecma =  mongoose.Schema({
 })
 
 
-const User = mongoose.model('user', userShecma)
+const User = mongoose.model('task_user', userShecma)
 
 
 module.exports = {User}

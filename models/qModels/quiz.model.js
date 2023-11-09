@@ -21,6 +21,6 @@ const quizSchema = new mongoose.Schema({
     leaderboard : {type:[leaderboardSchema], required : true}
 });
   
-const Quiz = mongoose.model('Quiz', quizSchema);
+const Quiz = mongoose.model('quizze', quizSchema);
   
 module.exports = {Quiz};
