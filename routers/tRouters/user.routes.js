@@ -5,6 +5,7 @@ require('dotenv').config()
 const {User} = require('../../models/tModels/user.model')
 const Board = require('../../models/tModels/board.model');
 const Task = require('../../models/tModels/tasks.model');
+const Subtask = require('../../models/tModels/subtask.model');
 const t_user_router = express.Router()
 
 t_user_router.post('/login', async(req, res)=>{
@@ -29,7 +30,12 @@ t_user_router.post('/login', async(req, res)=>{
                         user_email : email
                       })
                     
-                    await newTask.save()
+                    let savedTask = await newTask.save()
+
+                    let  subTask = new Subtask({title:"Add some tasks.", user_email:email, taskId:savedTask._id})
+                    let savedSubtask = await subTask.save()
+
+                    await Task.findByIdAndUpdate(savedTask._id, { $push: { subtasks: savedSubtask._id } })
                     await Board.findByIdAndUpdate(newBoard._id, { $push: { tasks: newTask._id } });
                 }
                 return res.status(200).send({msg : "login successful", isOk : true, user : user , token:token})
