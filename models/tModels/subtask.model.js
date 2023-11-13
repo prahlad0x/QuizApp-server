@@ -9,6 +9,10 @@ const subtaskSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  user_email: {
+    type: String,
+    required: true,
+  },
   taskId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Task',

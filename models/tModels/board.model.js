@@ -5,6 +5,10 @@ const boardSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  user_email: {
+    type: String,
+    required: true,
+  },
   tasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Task' }],
 });
 

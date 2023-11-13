@@ -5,6 +5,8 @@ const { quiz_router } = require('./routers/qRouters/routes')
 const { task_board_router } = require('./routers/tRouters/board.routes')
 const { task_tasks_router } = require('./routers/tRouters/task.routes')
 const { task_subtasks_router } = require('./routers/tRouters/subtasks.routes')
+const { checker } = require('./middleware/task.checker')
+const { t_user_router } = require('./routers/tRouters/user.routes')
 
 const app = express()
 require('dotenv').config()
@@ -16,6 +18,8 @@ app.use(cors())
 app.use("/Quiz", quiz_router)
 
 // for task routes
+app.use('/Task/user', t_user_router)
+app.use(checker)
 app.use("/Task", task_board_router)
 app.use("/Task", task_tasks_router)
 app.use("/Task", task_subtasks_router)

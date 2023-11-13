@@ -14,6 +14,10 @@ const taskSchema = new mongoose.Schema({
     enum: ['Todo', 'Doing', 'Done'],
     default: 'Todo',
   },
+  user_email: {
+    type: String,
+    required: true,
+  },
   subtasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subtask' }],
   boardId: {
     type: mongoose.Schema.Types.ObjectId,
