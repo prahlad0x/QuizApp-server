@@ -5,7 +5,6 @@ require('dotenv').config()
 const {User} = require('../../models/tModels/user.model')
 const Board = require('../../models/tModels/board.model');
 const Task = require('../../models/tModels/tasks.model');
-const Subtask = require('../../models/tModels/subtask.model');
 const t_user_router = express.Router()
 
 t_user_router.post('/login', async(req, res)=>{
@@ -14,7 +13,7 @@ t_user_router.post('/login', async(req, res)=>{
         let user = await User.findOne({email})
         if(!user) return res.status(404).send({msg : "User Not found !", isOk : false})
         else{
-            let ispassword = b.compareSync(password, user.password)
+            let ispassword =await b.compare(password, user.password)
             if(!ispassword) return res.status(400).send({msg: "Wrong Credientials !", isOk : false})
             else{
                 const token = jwt.sign({email}, process.env.secretKey, {expiresIn : "7d"})
@@ -27,15 +26,12 @@ t_user_router.post('/login', async(req, res)=>{
                         description : "try our product",
                         status : "Todo",
                         boardId: newBoard._id,
-                        user_email : email
+                        user_email : email,
+                        subtasks: [{title:"Add some tasks."}]
                       })
                     
                     let savedTask = await newTask.save()
 
-                    let  subTask = new Subtask({title:"Add some tasks.", user_email:email, taskId:savedTask._id})
-                    let savedSubtask = await subTask.save()
-
-                    await Task.findByIdAndUpdate(savedTask._id, { $push: { subtasks: savedSubtask._id } })
                     await Board.findByIdAndUpdate(newBoard._id, { $push: { tasks: newTask._id } });
                 }
                 return res.status(200).send({msg : "login successful", isOk : true, user : user , token:token})

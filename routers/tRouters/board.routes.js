@@ -2,7 +2,6 @@ const express = require('express');
 const task_board_router = express.Router();
 const Board = require('../../models/tModels/board.model');
 const Task = require('../../models/tModels/tasks.model');
-const Subtask = require('../../models/tModels/subtask.model');
 
 // Board Routes
 task_board_router.get('/boards', async (req, res) => {
@@ -18,8 +17,7 @@ task_board_router.get('/boards', async (req, res) => {
 task_board_router.get('/boards/:boardId', async(req, res)=>{
   try {
     const board = await Board.findById(req.params.boardId).populate({
-      path: 'tasks',
-      populate: { path: 'subtasks' }
+      path: 'tasks'
     });
     if (!board) {
       return res.status(404).json({ message: 'Board not found', isOk : false });

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const subtaskSchema = require('./subtask.model');
 
 const taskSchema = new mongoose.Schema({
   title: {
@@ -18,7 +19,7 @@ const taskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  subtasks: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Subtask' }],
+  subtasks: [{type:subtaskSchema}],
   boardId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Board',
